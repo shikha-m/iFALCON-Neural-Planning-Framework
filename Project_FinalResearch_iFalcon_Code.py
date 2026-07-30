@@ -5,13 +5,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[306]:
+
 
 
 import queue
 
 
-# In[307]:
+
 
 
 class InputField:                                                           #for F1 input/output field                                         
@@ -51,7 +51,7 @@ class InputField:                                                           #for
         self.rho = rho
 
 
-# In[308]:
+
 
 
 class F2CategoryField:
@@ -105,9 +105,9 @@ class F2CategoryField:
     #node with max_choice_fn is used to verify resonance
     def calc_total_choice_fn(self, obj_belief, obj_critic, obj_desire):     #calculates choice fn for a node j in F2
         total_choice_fn = 0
-        total_choice_fn = total_choice_fn +                                                        IFalcon.calc_choice_fn_field(                                              obj_belief,self.weight_belief)
-        total_choice_fn = total_choice_fn +                                                       IFalcon.calc_choice_fn_field(                                               obj_critic,self.weight_critic)         
-        total_choice_fn = total_choice_fn +                                                        IFalcon.calc_choice_fn_field(                                              obj_desire,self.weight_desire)
+        total_choice_fn = total_choice_fn + IFalcon.calc_choice_fn_field(obj_belief,self.weight_belief)
+        total_choice_fn = total_choice_fn + IFalcon.calc_choice_fn_field(obj_critic,self.weight_critic)         
+        total_choice_fn = total_choice_fn + IFalcon.calc_choice_fn_field(obj_desire,self.weight_desire)
         self.set_choice_function(total_choice_fn)
     
     #vigilance is checked for each node, for top down verification
@@ -138,7 +138,7 @@ class F2CategoryField:
         return pq                                                               #return priority queue
 
 
-# In[309]:
+
 
 
 class F3CategoryField:
@@ -217,7 +217,7 @@ class F3CategoryField:
     
 
 
-# In[310]:
+
 
 
 class IFalcon:
@@ -238,7 +238,7 @@ class IFalcon:
     # called by calc_total_choice_fn for every input field
     def calc_choice_fn_field(obj_input,weights):                                #calculates choice fn for a input field
         
-        numerator = IFalcon.norm(                                                    IFalcon.fuzzyAnd(obj_input.X,weights))         
+        numerator = IFalcon.norm(IFalcon.fuzzyAnd(obj_input.X,weights))         
         
         denominator = obj_input.alpha + IFalcon.norm(weights)
         
@@ -264,7 +264,7 @@ class IFalcon:
     
     def updateWeightsField(obj_input, weight):
         first_part = [ i * (1 - obj_input.beta) for i in weight]
-        second_part = [ i * obj_input.beta                                             for i in IFalcon.fuzzyAnd(obj_input.X,weight)]
+        second_part = [ i * obj_input.beta for i in IFalcon.fuzzyAnd(obj_input.X,weight)]
         new_weight =[ first_part[i] + second_part[i] for i in range(len(first_part))]
         return new_weight
     
@@ -291,12 +291,12 @@ class IFalcon:
         else:                                                                   #Plan Nodes in F2 exists
                                                                                 #check for resonance, if existing plan is close
                                                                                 #to one we are trying to encode
-            pq = F2CategoryField.createPriorityQueue(                                F2CategoryField.node_lst,obj_belief,obj_critic,obj_desire)
+            pq = F2CategoryField.createPriorityQueue(F2CategoryField.node_lst,obj_belief,obj_critic,obj_desire)
             nodeFound = False                                                   #to be used to indicate existing plan found or not
             while not pq.empty():                                               #checking node with highest choice fn
                 head = pq.get()
                 
-                if (head[1].isVigilanceConstraintSatisfied(                                 obj_belief,obj_critic,obj_desire) == True):
+                if (head[1].isVigilanceConstraintSatisfied(obj_belief,obj_critic,obj_desire) == True):
                     nodeFound = True                                               #Head will contain the pointer for existing plan node
                     break;                                                         #no need to check further nodes
                 
@@ -345,11 +345,11 @@ class IFalcon:
         else:                                                                 #Action Nodes in F3 exists
                                                                               #check for resonance, if existing action is close
                                                                               #to one we are trying to encode
-            pq = F3CategoryField.createPriorityQueue(                                F3CategoryField.node_lst,obj_action,obj_desire)
+            pq = F3CategoryField.createPriorityQueue(F3CategoryField.node_lst,obj_action,obj_desire)
             nodeFound = False                                                 #to be used to indicate existing action found or not
             while not pq.empty():                                             #checking node with highest choice fn
                 head = pq.get()
-                if (head[1].isVigilanceConstraintSatisfied(                                 obj_action,obj_desire) == True):
+                if (head[1].isVigilanceConstraintSatisfied(obj_action,obj_desire) == True):
                     nodeFound = True                                          #Head will contain the pointer for existing action node
                     break;                                                    #no need to check further nodes
                 
@@ -392,11 +392,11 @@ class IFalcon:
         head=""
         
         #trying to find existing node
-        pq = F2CategoryField.createPriorityQueue(                                F2CategoryField.node_lst,obj_belief,obj_critic,obj_desire)
+        pq = F2CategoryField.createPriorityQueue(F2CategoryField.node_lst,obj_belief,obj_critic,obj_desire)
         nodeFound = False                                                   #to be used to indicate existing plan found or not
         while not pq.empty():                                               #checking node with highest choice fn
             head = pq.get()
-            if (head[1].isVigilanceConstraintSatisfied(                             obj_belief,obj_critic,obj_desire) == True):
+            if (head[1].isVigilanceConstraintSatisfied(obj_belief,obj_critic,obj_desire) == True):
                 nodeFound = True                                            #Head will contain the pointer for existing plan node
                 break;
                
@@ -460,7 +460,7 @@ class IFalcon:
         
 
 
-# In[311]:
+
 
 
 class iFalconTest:
@@ -621,22 +621,3 @@ class iFalconTest:
     
     IFalcon.planSelectionAndExecution(belief_cl,critic_cl,desire_cl)
     
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
